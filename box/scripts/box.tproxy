@@ -308,6 +308,7 @@ start_tproxy() {
   # This rule blocks local access to tproxy-port to prevent traffic loopback.
   if [ "${iptables}" = "ip6tables -w 100" ] ; then
     ${iptables} -A OUTPUT -d ::1 -p tcp -m owner --uid-owner ${box_user} --gid-owner ${box_group} -m tcp --dport ${tproxy_port} -j REJECT
+    ${iptables} -I OUTPUT -p udp --dport 53 -j REJECT
   else
     ${iptables} -A OUTPUT -d 127.0.0.1 -p tcp -m owner --uid-owner ${box_user} --gid-owner ${box_group} -m tcp --dport ${tproxy_port} -j REJECT
   fi
